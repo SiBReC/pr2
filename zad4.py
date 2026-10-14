@@ -1,29 +1,56 @@
-#Вариант 4 расчет стоимости покупки
-name = input("Товар: ")
-if name == "":
-    print("Название не может быть пустым")
-    exit(1)
+#Вариант 4 расчет стоимости покупки +
+names = []
+prices = []
+kols = []
 
-try:
-    price_str = input("Цена: ").replace(",", ".")
-    price = float(price_str)
-except ValueError:
-    print("Введено не число")
-    exit(1)
+dobavit = True
+while dobavit:
+    name = input("Введите название товара: ")
+    if name.strip() == "":
+        print("Название не может быть пустым, введите товар заново")
+        continue
 
-try:
-    kol_str = input("Количество: ")
-    kol = int(kol_str)
-except ValueError:
-    print("Введено не число или оно не целое")
-    exit(1)
+    try:
+        price_str = input("Введите цену: ").replace(",", ".")
+        price = float(price_str)
+    except ValueError:
+        print("Введено не число, введите товар заново")
+        continue
 
-if price <= 0 or kol <= 0:
-    print("Цена и количество должны быть больше нуля")
-    exit(1)
+    try:
+        kol_str = input("Введите количество: ")
+        kol = int(kol_str)
+    except ValueError:
+        print("Введено не число или оно не целое, введите товар заново")
+        continue
 
-itog = price * kol
-print("Итого:", itog)
+    if price <= 0 or kol <= 0:
+        print("Цена и количество должны быть больше нуля, введите товар заново")
+        continue
+
+    names.append(name)
+    prices.append(price)
+    kols.append(kol)
+
+    #спрашиваем добавлять еще или нет
+    while True:
+        otvet = input("Добавить ещё один товар? (да/нет): ").lower()
+        if otvet == "да":
+            break
+        elif otvet == "нет":
+            dobavit = False
+            break
+        else:
+            print("Напишите да или нет")
+
+print()
+itog = 0
+for i in range(len(names)):
+    stoim = prices[i] * kols[i]
+    print(f"{names[i]}: {stoim}")
+    itog += stoim
+
+print("Общая стоимость:", itog)
 
 #скидка
 if itog >= 15000:
@@ -36,8 +63,8 @@ else:
     skidka = 0
 
 skidka_rub = itog * skidka / 100
-print(f"Скидка в процентах: {skidka}%")
-print("Скидка в рублях:", skidka_rub)
+print(f"Скидка: {skidka}%")
+print("Размер скидки:", skidka_rub)
 
 final = itog - skidka_rub
 
@@ -64,7 +91,7 @@ elif dost == "нет":
 else:
     print("Не понял ответ, считаем что самовывоз")
 
-print("Итоговая цена:", round(final, 2))
+print("Итоговая стоимость:", round(final, 2))
 
 #доп функционал: оплата
 oplata = input("Способ оплаты (1 - карта, 2 - наличные): ")
